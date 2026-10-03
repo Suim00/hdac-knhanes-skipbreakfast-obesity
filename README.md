@@ -36,56 +36,6 @@ B-2
 B-3
 
 
-
-DOMS = {'전체': glu_obs, '노출군(≥100)': EXP, '비노출군(<100)': UNEXP}
-
-def ind(cond, src):
-    """지시변수. 원변수가 결측이면 NaN 으로 남긴다."""
-    return np.where(df[src].isna(), np.nan, cond.astype(float))
-
-ROWS = [
- ('연령 (세)',          'cont', df['age'].astype(float).to_numpy()),
- ('  65세 이상',        'cat',  ind(df.age >= 65, 'age')),
- ('남성',               'cat',  ind(df.sex == 1, 'sex')),
- ('읍면 거주',          'cat',  ind(df.urban == 2, 'urban')),
- ('BMI (kg/m²)',        'cont', df['bmi'].astype(float).to_numpy()),
- ('  비만 (BMI≥25)',    'cat',  ind(df.bmi >= 25, 'bmi')),
- ('수축기혈압 (mmHg)',  'cont', df['sbp'].astype(float).to_numpy()),
- ('고혈압',             'cat',  df['htn'].astype(float).to_numpy()),
- ('총콜레스테롤 (mg/dL)','cont', df['chol'].astype(float).to_numpy()),
- ('현재흡연',           'cat',  ind(df.smk == 1, 'smk')),
- ('고위험음주',         'cat',  ind(df.drink == 3, 'drink')),
- ('규칙적 운동',        'cat',  ind(df.exercise == 2, 'exercise')),
-]
-
-def smd(y, kind, g1, g2):
-    y = np.asarray(y, float)
-    m1, _ = svymean_domain(y, w, ST, PS, g1)
-    m2, _ = svymean_domain(y, w, ST, PS, g2)
-    if kind == 'cat':
-        s = np.sqrt((m1*(1-m1) + m2*(1-m2)) / 2)
-    else:
-        s = np.sqrt((wsd(y[g1], w[g1])**2 + wsd(y[g2], w[g2])**2) / 2)
-    return (m1 - m2) / s
-
-hdr = {'특성': 'n (관측 수)'}
-for k, dom in DOMS.items():
-    hdr[k] = f'{int(dom.sum()):,}'
-hdr['SMD'] = ''
-out = [hdr]
-for lab, kind, y in ROWS:
-    r = {'특성': lab}
-    for k, dom in DOMS.items():
-        th, se = svymean_domain(y, w, ST, PS, dom)
-        n_obs = int((dom & ~np.isnan(y)).sum())
-        if kind == 'cont':
-            s = f'{th:.1f} ({se:.2f})'
-            if n_obs < dom.sum(): s += f' [n={n_obs:,}]'     # 결측 있는 변수는 n 병기
-        else:
-            s = f'{int(np.nansum(y * dom)):,} ({th*100:.1f})'
-        r[k] = s
-    v = smd(y, kind, EXP, UNEXP)
-    r['SMD'] = f'{v:+.2f}' + (' *' if abs(v) >= 0.1 else '')
     out.append(r)
 t1 = pd.DataFrame(out)
 print(t1.to_string(index=False))
