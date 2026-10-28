@@ -214,11 +214,18 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# 원시자료 (각자 Google Drive에만 보관)
+# 원시자료 (저장소에 올리지 않음)
 *.sas7bdat
 *.sav
+*.dta
 *.xpt
-*.sd2
+*.xlsx
+*.xls
+*.csv
+*.txt
+*.zip
+*.rds
+*.parquet
 hdac_data/
 
 # Colab / Jupyter
