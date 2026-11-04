@@ -40,7 +40,8 @@
 
 **자료 확인 결과 (code/09_data_check.ipynb 출력 기준)**
 - 파일 전체 6,997명, 변수 813개
-- `age`, `sex`, `HE_prg`, `L_BR_FQ`, `HE_ht`, `HE_wt`, `HE_BMI`, `HE_obe`, `wt_tot`, `kstrata`, `psu` 11개 변수 모두 파일에 있음
+- 핵심 변수 11개(age, sex, HE_prg, L_BR_FQ, HE_ht, HE_wt, HE_BMI, HE_obe, wt_tot, kstrata, psu)와 공변량 6개(town_t, educ, sm_presnt, dr_month, N_DIET, N_EN)가 모두 파일에 있음
+- L_BR_FQ 원 코드별 인원(전체 참여자): 1 주 5~7회 4,214명, 2 주 3~4회 669명, 3 주 1~2회 786명, 4 거의 안한다 1,136명, 결측 192명 (9 모름/무응답은 없음)
 - `HE_prg` 코드별 인원: 0(아니오) 3,911명, 1(예) 16명, 8(비해당, 남자) 3,070명
 - `wt_tot` 결측 192명, 0 이하 0명
 - `HE_obe` 결측 1,088명 (비임신자만 값이 있음)
